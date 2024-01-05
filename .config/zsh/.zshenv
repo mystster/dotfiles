@@ -23,7 +23,6 @@ export CARGO_HOME="$XDG_DATA_HOME/cargo"
 # deno
 export DENO_INSTALL="${DENO_INSTALL:-$XDG_DATA_HOME/deno}"
 export DENO_INSTALL_ROOT="$DENO_INSTALL"
-export PATH="$DENO_INSTALL/bin:$PATH"
 
 ### sheldon ###
 export SHELDON_CONFIG_DIR="$ZDOTDIR"
@@ -31,9 +30,3 @@ export SHELDON_CONFIG_DIR="$ZDOTDIR"
 ### gh-rd ###
 export GHRD_CONFIG_HOME="$XDG_CONFIG_HOME/gh-rd"
 export GHRD_DATA_HOME="$XDG_DATA_HOME/gh-rd"
-export PATH="${XDG_DATA_HOME:-$HOME/.local/share}/gh-rd/bin:$PATH"
-export FPATH="${XDG_DATA_HOME:-$HOME/.local/share}/gh-rd/completions:$FPATH"
-export MANPATH="${XDG_DATA_HOME:-$HOME/.local/share}/gh-rd/man:$MANPATH"
-
-# my scripts
-export PATH="${XDG_CONFIG_HOME:-$HOME/.config}/scripts:$PATH"

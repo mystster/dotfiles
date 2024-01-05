@@ -98,31 +98,37 @@ export default defineConfig({
         );
       },
     },
-    {
-      // https://github.com/dbrgn/tealdeer
-      // A very fast implementation of tldr in Rust. community based man
-      name: "dbrgn/tealdeer",
-      rename: [
-        { from: "tealdeer*", to: "tldr", chmod: 0o755 },
-      ],
-      async onDownload({ packageDir, bin: { tldr } }) {
-        await Promise.all([
-          // tldr --update
-          new Deno.Command(tldr, {
-            args: ["--update"],
-          }).output(),
+    // {
+    //   // https://github.com/dbrgn/tealdeer
+    //   // A very fast implementation of tldr in Rust. community based man
+    //   name: "dbrgn/tealdeer",
+    //   rename: [
+    //     { from: "tealdeer*", to: "tldr", chmod: 0o755 },
+    //   ],
+    //   async onDownload({ packageDir, bin: { tldr } }) {
+    //     await Promise.all([
+    //       // tldr --update
+    //       new Deno.Command(tldr, {
+    //         args: ["--update"],
+    //       }).output(),
 
-          saveRemoteFile(
-            "https://github.com/dbrgn/tealdeer/releases/latest/download/completions_zsh",
-            `${packageDir}/_tldr`,
-          ),
-        ]);
-      },
-    },
+    //       saveRemoteFile(
+    //         "https://github.com/dbrgn/tealdeer/releases/latest/download/completions_zsh",
+    //         `${packageDir}/_tldr`,
+    //       ),
+    //     ]);
+    //   },
+    // },
     {
       // https://github.com/junegunn/fzf
       // A command-line fuzzy finder 
       name: "junegunn/fzf",
+      async onDownload({ packageDir, bin: { mise } }) {
+        await saveRemoteFile(
+          "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh",
+          `${packageDir}/_fzf`,
+        );
+      },
     },
     {
       // https://github.com/sharkdp/bat
@@ -159,18 +165,24 @@ export default defineConfig({
           `${packageDir}/_mise`,
         );
       },
-
     },
     {
       // https://github.com/ajeetdsouza/zoxide
       // A smarter cd command. Supports all major shells. 
       name: "ajeetdsouza/zoxide",
-      async onDownload({ packageDir }) {
-        await saveRemoteFile(
-          "https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/contrib/completions/_zoxide",
-          `${packageDir}/_zoxide`,
-        );
+      async onDownload({ packageDir, bin: { zoxide } }) {
+        // await Promise.all([
+        //   await saveRemoteFile(
+        //     "https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/contrib/completions/_zoxide",
+        //     `${packageDir}/_zoxide`,
+        //   ),
+          await saveCommandOutput(
+            [zoxide, "init", "zsh"],
+            `${packageDir}/zoxide.zsh`
+          )
+
+        // ])
       },
-    }
+    },
   ],
 });
