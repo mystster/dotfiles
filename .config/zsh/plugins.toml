@@ -95,7 +95,7 @@ zsh-defer -a -t0.01 __zeno_bindkey
 profiles = ["lazy"]
 
 [plugins.zsh-autopair]
-github = "hlissner/zsh-autopair" # read after zabrze
+github = "hlissner/zsh-autopair"
 profiles = ["lazy"]
 
 [plugins.dietpi]

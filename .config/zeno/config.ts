@@ -779,8 +779,8 @@ const miscCompletions: ReadonlyArray<UserCompletionSource> = [
     patterns: [
       "^(sudo)?\\s*(systemctl)\\s+(status|enable|disable|start|stop|restart)\\s+$",
     ],
-    sourceCommand: "sudo systemctl list-unit-files -t service",
-    callback: "sed 's/ /\\n/'",
+    sourceCommand: "sudo systemctl list-unit-files -t service | sed 1d | sed '$d' | sed '$d'",
+    callback: "awk '{print $1}'",
   }
 ];
 
