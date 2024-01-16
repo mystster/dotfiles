@@ -65,6 +65,16 @@ if [[ -f "$ZDOTDIR/local.zsh" ]]; then
     source "$ZDOTDIR/local.zsh"
 fi
 
+### gpg ###
+export GPG_TTY=$(tty)
+
+### dotnet ###
+path=(
+    "$path[@]"
+    "$DOTNET_ROOT"(N-/)
+    "~/.dotnet/tools"(N-/)
+)
+
 sheldon::load lazy
 
 /boot/dietpi/func/dietpi-banner 1
