@@ -1,8 +1,6 @@
 [user]
 	email = mystster@gmail.com
 	name = mystster
-[credential]
-	helper = /home/myst/.dotnet/tools/git-credential-manager
 [credential "https://dev.azure.com"]
 	useHttpPath = true
 [core]
@@ -20,3 +18,6 @@
 
 [diff]
     colorMoved = default
+[credential]
+	helper = 
+	helper = /home/myst/.dotnet/tools/git-credential-manager

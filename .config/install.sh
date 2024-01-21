@@ -38,11 +38,7 @@ else
 fi
 
 # add to path
-path=(
-    "$DENO_INSTALL/bin"(N-/)
-    "$GHRD_DATA_HOME/bin"(N-/)
-    "$path[@]"
-)
+export PATH="$DENO_INSTALL/bin:$PATH"
 
 # install using gh-rd
-gh-rd
+"$GHRD_DATA_HOME/bin/gh-rd"

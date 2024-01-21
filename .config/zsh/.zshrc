@@ -23,6 +23,8 @@ path=(
     "$DENO_INSTALL/bin"(N-/)
     "$GHRD_DATA_HOME/bin"(N-/)
     "$XDG_CONFIG_HOME/scripts"(N-/)
+    "$DOTNET_ROOT"(N-/)
+    "$HOME/.dotnet/tools"(N-/)
     "$path[@]"
 )
 
