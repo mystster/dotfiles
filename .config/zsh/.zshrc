@@ -78,10 +78,10 @@ source() {
 }
 
 ### hooks ###
-zshaddhistory() {
-    local line="${1%%$'\n'}"
-    [[ ! "$line" =~ "^(cd|history|jj?|lazygit|la|ll|ls|rm|rmdir|trash)($| )" ]]
-}
+# zshaddhistory() {
+#     local line="${1%%$'\n'}"
+#     [[ ! "$line" =~ "^(cd|history|jj?|lazygit|la|ll|ls|rm|rmdir|trash)($| )" ]]
+# }
 
 chpwd() {
     printf "\e[34m%s\e[m:\n" "${PWD/$HOME/~}"
