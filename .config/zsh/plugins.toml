@@ -28,12 +28,12 @@ apply = ["source"]
 profiles = ["eager"]
 
 [plugins.croque]
-local = "~/.local/share/gh-rd/packages/github.com/Ryooooooga/croque"
+local = "${GHRD_DATA_HOME}/packages/github.com/Ryooooooga/croque"
 apply = ["source"]
 profiles = ["eager"]
 
 [plugins.lazy]
-local = "~/.config/zsh"
+local = "${ZDOTDIR}"
 use = ["lazy.zsh"]
 profiles = ["eager"]
 
@@ -103,7 +103,7 @@ github = "unixorn/dietpi.plugin.zsh"
 profiles = ["lazy"]
 
 [plugins.zoxide]
-local = "~/.local/share/gh-rd/packages/github.com/ajeetdsouza/zoxide"
+local = "${GHRD_DATA_HOME}/packages/github.com/ajeetdsouza/zoxide"
 profiles = ["lazy"]
 
 # programs
@@ -111,19 +111,11 @@ profiles = ["lazy"]
 github = "wfxr/forgit"
 profiles = ["lazy"]
 
-[plugins.forgit-completion]
-github = "wfxr/forgit"
-dir = "completions"
-apply = ["fpath"]
-hooks.post = """
-source ~/.local/share/sheldon/repos/github.com/wfxr/forgit/completions/git-forgit.zsh
-"""
-profiles = ["lazy"]
-
 # local
 [plugins.compinit]
 inline = """
 autoload -U compinit
 zsh-defer -a -t0.01 compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+source ${GHRD_DATA_HOME}/packages/github.com/jdx/mise/mise.zsh
 """
 profiles = ["lazy"]

@@ -27,7 +27,7 @@ export default defineConfig({
     {
       // https://github.com/rossmacarthur/sheldon
       // Fast, configurable, shell plugin manager 
-      name: "rossmacarthur/sheldon",
+      name: "mystster/sheldon",
     },
     {
       // https://github.com/Ryooooooga/croque
@@ -123,7 +123,7 @@ export default defineConfig({
       // https://github.com/junegunn/fzf
       // A command-line fuzzy finder 
       name: "junegunn/fzf",
-      async onDownload({ packageDir, bin: { mise } }) {
+      async onDownload({ packageDir }) {
         await saveRemoteFile(
           "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh",
           `${packageDir}/_fzf`,
@@ -162,7 +162,7 @@ export default defineConfig({
       async onDownload({ packageDir, bin: { mise } }) {
         await saveCommandOutput(
           [mise, "activate", "zsh"],
-          `${packageDir}/_mise`,
+          `${packageDir}/mise.zsh`,
         );
       },
     },
