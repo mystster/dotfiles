@@ -141,16 +141,15 @@ widget::ghq::session() {
     local repo_dir="$(ghq list --exact --full-path "$selected")"
     local session_name="${selected//[:. ]/-}"
 
-    if [[ -z "$TMUX" ]]; then
-        BUFFER="tmux new-session -A -s ${(q)session_name} -c ${(q)repo_dir}"
-        zle accept-line
-    elif [[ "$(tmux display-message -p "#S")" != "$session_name" ]]; then
-        tmux new-session -d -s "$session_name" -c "$repo_dir" 2>/dev/null
-        tmux switch-client -t "$session_name"
-    else
-        BUFFER="cd ${(q)repo_dir}"
-        zle accept-line
-    fi
+    # if [[ -z "$ZELLIJ" ]]; then
+    #     BUFFER="zellij -s ${(q)session_name} run --cwd ${(q)repo_dir} -- pwd"
+    #     zle accept-line
+    # else
+    #     BUFFER="zellij action new-tab -n ${(q)session_name} --cwd ${(q)repo_dir} -- pwd"
+    #     zle accept-line
+    # fi
+    BUFFER="cd ${(q)repo_dir}"
+    zle accept-line
     zle -R -c # refresh screen
 }
 
