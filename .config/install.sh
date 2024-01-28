@@ -30,12 +30,7 @@ mkdir -p "$XDG_DATA_HOME/zsh/completions"
 "$DENO_INSTALL/bin/deno" completions zsh >"$XDG_DATA_HOME/zsh/completions/_deno"
 
 # gh-rd install
-if [[ -x "$GHRD_DATA_HOME/bin/gh-rd" ]]; then
-    echo "gh-rd is already installed."
-else
-    echo "Installing gh-rd..."
-    curl -fsSL https://raw.githubusercontent.com/Ryooooooga/gh-rd/main/install.bash | /bin/bash
-fi
+curl -fsSL https://raw.githubusercontent.com/Ryooooooga/gh-rd/main/install.bash | /bin/bash
 
 # add to path
 export PATH="$DENO_INSTALL/bin:$PATH"
