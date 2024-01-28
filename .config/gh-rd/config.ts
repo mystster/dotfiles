@@ -167,6 +167,17 @@ export default defineConfig({
       },
     },
     {
+      // https://github.com/zellij-org/zellij
+      // A terminal workspace with batteries included 
+      name: "zellij-org/zellij",
+      async onDownload({ packageDir, bin: { zellij } }) {
+        await saveCommandOutput(
+          [zellij, "setup", "--generate-completion", "zsh"],
+          `${packageDir}/_zellij`,
+        );
+      },
+    },
+    {
       // https://github.com/ajeetdsouza/zoxide
       // A smarter cd command. Supports all major shells. 
       name: "ajeetdsouza/zoxide",

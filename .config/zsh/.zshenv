@@ -35,3 +35,6 @@ export SHELDON_CONFIG_DIR="$ZDOTDIR"
 ### gh-rd ###
 export GHRD_CONFIG_HOME="$XDG_CONFIG_HOME/gh-rd"
 export GHRD_DATA_HOME="$XDG_DATA_HOME/gh-rd"
+
+### zellij ###
+export ZELLIJ_CONFIG_DIR="$XDG_CONFIG_HOME/zellij"
