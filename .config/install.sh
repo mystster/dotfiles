@@ -13,8 +13,12 @@ mkdir -p \
     "$XDG_DATA_HOME" \
     "$XDG_CACHE_HOME"
 
-ln -sfv "$XDG_CONFIG_HOME/zsh/.zshenv" "$HOME/.zshenv"
-ln -sfnv "$XDG_CONFIG_HOME/vim" "$HOME/.vim"
+if [[ ! -e "$HOME/.zshenv" ]]; then
+    ln -sfv "$XDG_CONFIG_HOME/zsh/.zshenv" "$HOME/.zshenv"
+fi
+if [[ ! -e "$HOME/.vim" ]]; then
+    ln -sfnv "$XDG_CONFIG_HOME/vim" "$HOME/.vim"
+fi
 
 # Deno install
 if [[ -x "$DENO_INSTALL/bin/deno" ]]; then
