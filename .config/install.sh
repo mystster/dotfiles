@@ -33,6 +33,9 @@ echo "Install Deno completions..."
 mkdir -p "$XDG_DATA_HOME/zsh/completions"
 "$DENO_INSTALL/bin/deno" completions zsh >"$XDG_DATA_HOME/zsh/completions/_deno"
 
+#rust install
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+
 # gh-rd install
 curl -fsSL https://raw.githubusercontent.com/Ryooooooga/gh-rd/main/install.bash | /bin/bash
 
