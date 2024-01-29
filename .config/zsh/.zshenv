@@ -7,6 +7,7 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$XDG_ROOT_HOME/.cache}"
 
 ### zsh ###
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export SHELL="/bin/zsh"
 
 # pass for git credential manager
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
