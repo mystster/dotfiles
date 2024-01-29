@@ -34,7 +34,16 @@ mkdir -p "$XDG_DATA_HOME/zsh/completions"
 "$DENO_INSTALL/bin/deno" completions zsh >"$XDG_DATA_HOME/zsh/completions/_deno"
 
 #rust install
-curl https://sh.rustup.rs -sSf | sh -s -- -y
+if [[ $RUST_INSTALL = "true" ]]; then
+    echo "Install RUST..."
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+fi
+
+#pnpm install
+if [[ $PNPM_INSTALL = "true" ]]; then
+    echo "Install pnpm..."
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
+fi
 
 # gh-rd install
 curl -fsSL https://raw.githubusercontent.com/Ryooooooga/gh-rd/main/install.bash | /bin/bash
