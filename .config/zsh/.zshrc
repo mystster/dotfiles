@@ -25,6 +25,7 @@ path=(
     "$XDG_CONFIG_HOME/scripts"(N-/)
     "$DOTNET_ROOT"(N-/)
     "$HOME/.dotnet/tools"(N-/)
+    "$PNPM_HOME"(N-/)
     "$path[@]"
 )
 
