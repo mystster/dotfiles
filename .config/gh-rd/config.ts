@@ -1,4 +1,5 @@
 import { defineConfig } from "https://raw.githubusercontent.com/Ryooooooga/gh-rd/main/src/config/types.ts";
+import { tgz } from "https://deno.land/x/compress@v0.4.5/mod.ts";
 
 async function saveCommandOutput(
   cmd: [string, ...string[]],
@@ -19,6 +20,31 @@ async function saveRemoteFile(
   const res = await fetch(new URL(from));
   if (res.body !== null) {
     await Deno.writeFile(to, res.body);
+  }
+}
+
+async function extractRemoteFile(from:string, to: string, extractFilePath: string) {
+  const res = await fetch(new URL(from));
+  if (res.body != null) {
+    let workdir;
+    try {
+      workdir = await Deno.makeTempDir();
+      await Deno.writeFile(`${workdir}/result`, res.body);
+      const extractPath = `${workdir}/extract`;
+      await Deno.mkdir(extractPath);
+      await tgz.uncompress(`${workdir}/result`, extractPath);
+      try {
+        await Deno.copyFile(`${extractPath}/${extractFilePath}`, to);
+      } catch (e) {
+        console.log(`file not found in ${extractFilePath}`);
+      }
+    } catch (e) {
+      console.log(`error: ${e?.message}`);
+    } finally {
+      if (workdir) {
+        await Deno.remove(workdir);
+      }
+    }
   }
 }
 
@@ -182,18 +208,35 @@ export default defineConfig({
       // A smarter cd command. Supports all major shells. 
       name: "ajeetdsouza/zoxide",
       async onDownload({ packageDir, bin: { zoxide } }) {
-        // await Promise.all([
-        //   await saveRemoteFile(
-        //     "https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/contrib/completions/_zoxide",
-        //     `${packageDir}/_zoxide`,
-        //   ),
           await saveCommandOutput(
             [zoxide, "init", "zsh"],
             `${packageDir}/zoxide.zsh`
           )
-
-        // ])
       },
     },
+    {
+      // https://github.com/yt-dlp/yt-dlp
+      // A youtube-dl fork with additional features and fixes 
+      name: "yt-dlp/yt-dlp",
+      // rename: [{ from: "yt-dlp*", to: "yt-dlp", chmod: 744 }],
+      executables: [{ glob: "yt-dlp*", as: "yt-dlp"}],
+      async onDownload({ packageDir }) {
+        await extractRemoteFile(
+          "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.tar.gz",
+          `${packageDir}/_yt-dlp`,
+          "yt-dlp/completions/zsh/_yt-dlp"
+        );
+      }
+    },
+    {
+      // https://github.com/yt-dlp/FFmpeg-Builds
+      // FFmpeg Builds for yt-dlp
+      name: "yt-dlp/FFmpeg-Builds",
+    },
+    {
+      // https://github.com/twpayne/chezmoi
+      // Manage your dotfiles across multiple diverse machines, securely. 
+      name: "twpayne/chezmoi",
+    }
   ],
 });
