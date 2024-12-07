@@ -1,0 +1,113 @@
+# version: '3'
+name: home_assistant
+# https://community.home-assistant.io/t/example-config-docker-with-home-assitant-mosquitto-zigbee2mqtt-and-traefik/632306
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ${XDG_DATA_HOME}/homeassistant/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    restart: always
+    stop_grace_period: 2m
+    privileged: true
+    network_mode: host
+    # HASS was originally in the proxy network and could hence resolve mosquitto via its ervice name
+    # Since HASS is now in network mode "host" that resolution no longer works.
+    # To not have to change the configs inside HASS static IPs are assigned to the docker services
+    # and "extra_hosts" provides DNS name "mosquitto" to HASS.
+    # extra_hosts:
+    #   - "mosquitto:172.21.0.2"
+    environment:
+      TZ: Asia/Tokyo
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    depends_on:
+      - mosquitto
+  # https://github.com/banban525/echonetlite2mqtt/blob/master/README.ja.md
+  echonetlite2mqtt:
+    image: banban525/echonetlite2mqtt
+    container_name: echonetlite2mqtt
+    restart: unless-stopped
+    stop_grace_period: 2m
+    network_mode: host
+    environment:
+      MQTT_BROKER: "mqtt://localhost"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    depends_on:
+      - mosquitto
+
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt
+    container_name: zigbee2mqtt
+    restart: unless-stopped
+    stop_grace_period: 2m
+    network_mode: host
+    # networks:
+    #   proxy:
+    #     # The static IP is not really necessary, but adedd for symmetry
+    #     ipv4_address: 172.21.0.4
+    volumes:
+      - ${XDG_DATA_HOME}/homeassistant/zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    devices:
+      - /dev/serial/by-id/usb-1a86_USB_Serial-if00-port0:/dev/ttyUSB0
+    environment:
+      TZ: Asia/Tokyo
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    depends_on:
+      - mosquitto
+
+  # traefik:
+  #   image: traefik:2.10.4
+  #   container_name: traefik
+  #   command: --configFile=/etc/traefik/traefik.yml
+  #   restart: always
+  #   stop_grace_period: 2m
+  #   networks:
+  #     proxy:
+  #       # The static IP is not really necessary, but adedd for symmetry
+  #       ipv4_address: 172.21.0.3
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #     - 8883:8883
+  #   volumes:
+  #     - ${XDG_DATA_HOME}/homeassistant/traefik/cfg:/etc/traefik
+  #     - ${XDG_DATA_HOME}/homeassistant/traefik/log:/var/log
+  #     - ${XDG_DATA_HOME}/homeassistant/letsencrypt:/letsencrypt:ro
+  #   labels:
+  #     - "com.centurylinklabs.watchtower.enable=true"
+
+
+  mosquitto:
+    image: "eclipse-mosquitto"
+    container_name: "mosquitto"
+    restart: always
+    stop_grace_period: 2m
+    volumes:
+      - "${XDG_DATA_HOME}/homeassistant/mosquitto/cfg:/mosquitto/config"
+      - "${XDG_DATA_HOME}/homeassistant/mosquitto/data:/mosquitto/data"
+      - "${XDG_DATA_HOME}/homeassistant/mosquitto/log:/mosquitto/log"
+      - "${XDG_DATA_HOME}/homeassistant/letsencrypt:/letsencrypt:ro"
+    network_mode: host
+    # networks:
+    #   proxy:
+    #     # The static IP is needed for HASS - see comments in service "homeassistant" above.
+    #     ipv4_address: 172.21.0.2
+    environment:
+      TZ: Asia/Tokyo
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+# A network definition is necessary because homeassistant needs to define the IP or IP range
+# of the reverse proxy in the configuration of the http integration.
+# It is also necessary for the reverse proxy and to assign static IPs.
+# networks:
+#   proxy:
+#     ipam:
+#       config:
+#         - subnet: 172.21.0.0/16
