@@ -17,7 +17,7 @@ fi
 if (( ${+commands[eza]} )); then
     alias ls='eza --group-directories-first'
     alias la='eza --group-directories-first -a'
-    alias ll='eza --group-directories-first -al --header --color-scale --git --icons --time-style=long-iso'
+    alias ll='eza --group-directories-first -al -g --header --color-scale --icons --time-style=long-iso'
     alias tree='eza --group-directories-first --tree --icons'
 fi
 
@@ -67,6 +67,16 @@ fi
 
 ### gpg ###
 export GPG_TTY=$(tty)
+
+### yazi ###
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
 
 sheldon::load lazy
 

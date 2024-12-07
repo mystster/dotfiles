@@ -35,10 +35,11 @@ async function extractRemoteFile(from:string, to: string, extractFilePath: strin
       await tgz.uncompress(`${workdir}/result`, extractPath);
       try {
         await Deno.copyFile(`${extractPath}/${extractFilePath}`, to);
-      } catch (e) {
+      } catch (_) {
         console.log(`file not found in ${extractFilePath}`);
       }
-    } catch (e) {
+    // deno-lint-ignore no-explicit-any
+    } catch (e: any) {
       console.log(`error: ${e?.message}`);
     } finally {
       if (workdir) {
@@ -237,6 +238,11 @@ export default defineConfig({
       // https://github.com/twpayne/chezmoi
       // Manage your dotfiles across multiple diverse machines, securely. 
       name: "twpayne/chezmoi",
+    },
+    {
+      // https://github.com/sxyazi/yazi
+      // Blazing fast terminal file manager written in Rust, based on async I/O.
+      name: "sxyazi/yazi"
     }
   ],
 });
